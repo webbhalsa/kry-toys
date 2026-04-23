@@ -1,0 +1,136 @@
+name: lmwrnglr Release
+
+on:
+  push:
+    tags:
+      - "lmwrnglr/v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-14
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: lmwrnglr/src-tauri -> target
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: npm
+          cache-dependency-path: lmwrnglr/package-lock.json
+
+      - name: Install dependencies
+        working-directory: lmwrnglr
+        run: npm ci
+
+      - name: Extract version and pre-release flag from tag
+        id: version
+        run: |
+          VERSION="${GITHUB_REF_NAME#lmwrnglr/v}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if [[ "$VERSION" == *"-"* ]]; then
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate version is strict semver
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          node -e "
+            const v = process.env.VERSION;
+            const parts = v.split('-');
+            if (parts.length > 1) {
+              const pre = parts.slice(1).join('-');
+              for (const id of pre.split('.')) {
+                if (/^0\d+$/.test(id)) {
+                  console.error('Invalid semver: pre-release identifier \"' + id + '\" has a leading zero (use \"' + parseInt(id) + '\" instead)');
+                  process.exit(1);
+                }
+              }
+            }
+            console.log('Version is valid semver:', v);
+          "
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+
+      - name: Bump version in tauri.conf.json
+        run: |
+          node -e "
+            const fs = require('fs');
+            const p = 'lmwrnglr/src-tauri/tauri.conf.json';
+            const conf = JSON.parse(fs.readFileSync(p, 'utf8'));
+            conf.version = process.env.VERSION;
+            fs.writeFileSync(p, JSON.stringify(conf, null, 2) + '\n');
+            console.log('Set tauri.conf.json version to:', conf.version);
+          "
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+
+      - name: Install create-dmg
+        run: brew install create-dmg
+
+      - name: Build and publish Tauri release
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          projectPath: lmwrnglr
+          tagName: ${{ github.ref_name }}
+          releaseName: "lmwrnglr v${{ steps.version.outputs.version }}"
+          releaseBody: "See the assets below to download this version and the assets to the right for checksums."
+          prerelease: ${{ steps.version.outputs.prerelease }}
+          args: --target universal-apple-darwin
+
+      - name: Rewrite latest.json to use GitHub API download URLs
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          RELEASE=$(gh api "repos/$REPO/releases/tags/$TAG")
+
+          MANIFEST_API_URL=$(echo "$RELEASE" | jq -r '.assets[] | select(.name == "latest.json") | .url')
+          if [ -z "$MANIFEST_API_URL" ] || [ "$MANIFEST_API_URL" = "null" ]; then
+            echo "No latest.json in release — skipping URL rewrite (signing not configured)"
+            exit 0
+          fi
+
+          curl -sL \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/octet-stream" \
+            "$MANIFEST_API_URL" > latest.json
+
+          echo "$RELEASE" | python3 -c "
+          import json, sys
+          release = json.load(sys.stdin)
+          with open('latest.json') as f:
+              content = f.read()
+          for asset in release.get('assets', []):
+              content = content.replace(asset['browser_download_url'], asset['url'])
+          with open('latest.json', 'w') as f:
+              f.write(content)
+          print('Rewrote', len(release.get('assets', [])), 'asset URLs')
+          "
+
+          ASSET_ID=$(echo "$RELEASE" | jq -r '.assets[] | select(.name == "latest.json") | .id')
+          gh api --method DELETE "repos/$REPO/releases/assets/$ASSET_ID"
+          gh release upload "$TAG" latest.json --repo "$REPO" --clobber
+          echo "latest.json updated successfully"

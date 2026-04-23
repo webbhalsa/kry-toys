@@ -1,0 +1,61 @@
+name: lmwrnglr Rust Cache Warm
+
+# Runs on every push to main that touches Rust sources, compiling both
+# architectures on macos-14 so the Swatinem cache is stored under
+# refs/heads/main.  Tag-triggered release workflows (same runner + toolchain)
+# can then restore that cache and skip the full ~8-minute compile.
+#
+# Also runs on a weekly schedule so the cache stays warm even when Cargo.lock
+# hasn't changed — Swatinem keys on toolchain version too, so a new stable
+# Rust release invalidates the key and causes a cold rebuild on the next
+# release without this.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "lmwrnglr/src-tauri/Cargo.lock"
+  schedule:
+    - cron: '0 4 * * 1'  # Every Monday 04:00 UTC — refreshes before the 7-day cache expiry
+  workflow_dispatch:
+
+jobs:
+  warm-rust-cache:
+    runs-on: macos-14
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: lmwrnglr/src-tauri -> target
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: npm
+          cache-dependency-path: lmwrnglr/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: lmwrnglr
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: lmwrnglr
+        run: npm run build
+
+      - name: Build (aarch64) — warms Cargo cache
+        working-directory: lmwrnglr/src-tauri
+        run: cargo build --release --target aarch64-apple-darwin
+
+      - name: Build (x86_64) — warms Cargo cache
+        working-directory: lmwrnglr/src-tauri
+        run: cargo build --release --target x86_64-apple-darwin

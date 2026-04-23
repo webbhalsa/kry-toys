@@ -1,0 +1,15 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Common build outputs (applications keep their own .gitignore too)
+node_modules/
+target/
+dist/
+coverage/

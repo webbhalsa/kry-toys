@@ -1,0 +1,38 @@
+name: lmwrnglr CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "lmwrnglr/**"
+  pull_request:
+    paths:
+      - "lmwrnglr/**"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: lmwrnglr/package-lock.json
+
+      - name: Pin npm version
+        run: npm install -g npm@10
+
+      - name: Install dependencies (validates lock file)
+        working-directory: lmwrnglr
+        run: npm ci
+
+      - name: Type-check
+        working-directory: lmwrnglr
+        run: npx tsc --noEmit
+
+      - name: Run tests
+        working-directory: lmwrnglr
+        run: npm run test:run

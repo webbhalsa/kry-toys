@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+
+  <!-- ── Background ─────────────────────────────────────────────── -->
+  <rect width="512" height="512" rx="108" fill="#1e1e2e"/>
+
+  <!-- ── Legs (behind body) ──────────────────────────────────────── -->
+  <rect x="188" y="408" width="30" height="72" rx="15" fill="#2a2030"/>
+  <rect x="232" y="412" width="30" height="68" rx="15" fill="#2a2030"/>
+  <rect x="274" y="412" width="30" height="68" rx="15" fill="#2a2030"/>
+  <rect x="318" y="408" width="30" height="72" rx="15" fill="#2a2030"/>
+  <!-- Hooves -->
+  <rect x="185" y="466" width="36" height="20" rx="10" fill="#181520"/>
+  <rect x="229" y="468" width="36" height="18" rx="9"  fill="#181520"/>
+  <rect x="271" y="468" width="36" height="18" rx="9"  fill="#181520"/>
+  <rect x="315" y="466" width="36" height="20" rx="10" fill="#181520"/>
+
+  <!-- ── Fluffy wool body ─────────────────────────────────────────── -->
+  <!-- Back row -->
+  <circle cx="256" cy="430" r="92"  fill="#ece8da"/>
+  <circle cx="172" cy="420" r="72"  fill="#ece8da"/>
+  <circle cx="340" cy="420" r="72"  fill="#ece8da"/>
+  <circle cx="130" cy="460" r="58"  fill="#ece8da"/>
+  <circle cx="382" cy="460" r="58"  fill="#ece8da"/>
+  <!-- Mid row -->
+  <circle cx="256" cy="355" r="105" fill="#ece8da"/>
+  <circle cx="165" cy="348" r="82"  fill="#ece8da"/>
+  <circle cx="347" cy="348" r="82"  fill="#ece8da"/>
+  <!-- Top row (shoulders) -->
+  <circle cx="208" cy="308" r="68"  fill="#ece8da"/>
+  <circle cx="304" cy="308" r="68"  fill="#ece8da"/>
+
+  <!-- ── Ears (peek out at sides of head) ───────────────────────── -->
+  <ellipse cx="172" cy="248" rx="28" ry="45"
+           fill="#ddd4be" transform="rotate(-18 172 248)"/>
+  <ellipse cx="340" cy="248" rx="28" ry="45"
+           fill="#ddd4be" transform="rotate( 18 340 248)"/>
+  <!-- Inner ear -->
+  <ellipse cx="172" cy="250" rx="15" ry="30"
+           fill="#f5afc5" transform="rotate(-18 172 250)"/>
+  <ellipse cx="340" cy="250" rx="15" ry="30"
+           fill="#f5afc5" transform="rotate( 18 340 250)"/>
+
+  <!-- ── Head ───────────────────────────────────────────────────── -->
+  <ellipse cx="256" cy="268" rx="94" ry="88" fill="#ede3cf"/>
+
+  <!-- ── Eyes ───────────────────────────────────────────────────── -->
+  <!-- Sclera -->
+  <ellipse cx="222" cy="254" rx="16" ry="18" fill="white"/>
+  <ellipse cx="290" cy="254" rx="16" ry="18" fill="white"/>
+  <!-- Iris -->
+  <ellipse cx="224" cy="256" rx="11" ry="13" fill="#3a2208"/>
+  <ellipse cx="292" cy="256" rx="11" ry="13" fill="#3a2208"/>
+  <!-- Pupils -->
+  <ellipse cx="225" cy="257" rx="6"  ry="8"  fill="#160e04"/>
+  <ellipse cx="293" cy="257" rx="6"  ry="8"  fill="#160e04"/>
+  <!-- Catchlights -->
+  <circle  cx="220" cy="251" r="4"   fill="white"/>
+  <circle  cx="288" cy="251" r="4"   fill="white"/>
+  <!-- Upper eyelids (give a warm, friendly look) -->
+  <path d="M 206 244 Q 222 236 238 244"
+        stroke="#3a2208" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M 274 244 Q 290 236 306 244"
+        stroke="#3a2208" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+  <!-- ── Muzzle & nose ──────────────────────────────────────────── -->
+  <ellipse cx="256" cy="300" rx="32" ry="24" fill="#d9cebc"/>
+  <ellipse cx="256" cy="292" rx="18" ry="12" fill="#f5a8be"/>
+  <!-- Nostrils -->
+  <ellipse cx="249" cy="294" rx="5" ry="4.5" fill="#c0587a"/>
+  <ellipse cx="263" cy="294" rx="5" ry="4.5" fill="#c0587a"/>
+  <!-- Big goofy grin -->
+  <path d="M 236 310 Q 256 330 276 310"
+        stroke="#5a3020" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+  <!-- ── Cowboy hat ──────────────────────────────────────────────── -->
+  <!-- Brim drop shadow -->
+  <ellipse cx="258" cy="188" rx="128" ry="29" fill="#1e1e2e" opacity="0.4"/>
+  <!-- Brim -->
+  <ellipse cx="256" cy="184" rx="127" ry="27" fill="#9B6840"/>
+  <!-- Crown -->
+  <path d="M 200 182
+           C 197 160 197 124 204 102
+           C 212  80 233  66 256  66
+           C 279  66 300  80 308 102
+           C 315 124 315 160 312 182 Z"
+        fill="#6B3A1F"/>
+  <!-- Crown top cap -->
+  <ellipse cx="256" cy="66" rx="52" ry="16" fill="#6B3A1F"/>
+  <!-- Crown pinch / crease (classic cowboy hat dent) -->
+  <path d="M 218 78 Q 256 96 294 78"
+        stroke="#9B6840" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <!-- Hat band -->
+  <rect x="198" y="170" width="116" height="18" rx="7" fill="#C8922A"/>
+  <!-- Buckle body -->
+  <rect x="247" y="172" width="18" height="14" rx="3" fill="#E8B830"/>
+  <rect x="247" y="172" width="18" height="14" rx="3"
+        fill="none" stroke="#9A6810" stroke-width="2"/>
+  <!-- Buckle centre bar -->
+  <line x1="256" y1="172" x2="256" y2="186"
+        stroke="#9A6810" stroke-width="2"/>
+
+  <!-- ── Lasso ────────────────────────────────────────────────────── -->
+  <!-- Loop -->
+  <circle cx="390" cy="394" r="46" fill="none" stroke="#9B6840" stroke-width="7"
+          stroke-dasharray="11 5.5" stroke-linecap="round"
+          transform="rotate(-25 390 394)"/>
+  <!-- Honda knot at rope-loop join -->
+  <circle cx="346" cy="370" r="9" fill="none" stroke="#9B6840" stroke-width="7"/>
+  <!-- Tail of rope disappearing off-edge -->
+  <path d="M 339 364 C 326 344 314 326 308 308"
+        stroke="#9B6840" stroke-width="7" fill="none" stroke-linecap="round"/>
+
+</svg>

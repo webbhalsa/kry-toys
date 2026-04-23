@@ -1,0 +1,41 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "lmwrnglr",
+  "version": "0.1.0",
+  "identifier": "com.lmwrnglr.app",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "lmwrnglr",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 500,
+        "minHeight": 400,
+        "titleBarStyle": "Overlay",
+        "hiddenTitle": true
+      }
+    ],
+    "security": {
+      "csp": null
+    },
+    "macOSPrivateApi": true
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDE1NEY0RjVDOEEzQ0ZBRjYKUldUMitqeUtYRTlQRllpdkJHaFNVakJ4S3NjaElCVGlLcnFuVnY3RUJMQVV6ZUIrcG1LV0toUCsK"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "createUpdaterArtifacts": true,
+    "icon": ["icons/icon.png", "icons/icon.icns", "icons/icon.ico"]
+  }
+}
