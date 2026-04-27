@@ -1,11 +1,11 @@
 # kry-toys
 
-A monorepo of tools and applications built by the Kry team. Anyone at Kry is welcome to add a new project here.
+A monorepo of tools and applications built by the Kry team.
 
 ## Applications
 
-| App | Description |
-|-----|-------------|
+| App                     | Description                                                                                                                                            |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [lmwrnglr](./lmwrnglr/) | Multi-terminal manager for AI coding sessions. Manage multiple terminal panes in a single window with Claude Code integration and session persistence. |
 
 ---
@@ -50,11 +50,11 @@ on:
       - "your-app-name/**"
 ```
 
-5. Open a PR and get it merged.
+1. Open a PR and get it merged.
 
 ### README template
 
-```markdown
+````markdown
 # your-app-name
 
 One-sentence description.
@@ -73,6 +73,7 @@ One-sentence description.
 ```bash
 # commands to build
 ```
+````
 
 ## Running
 
@@ -88,4 +89,7 @@ Releases are published automatically when a tag matching `your-app-name/v*` is p
 git tag your-app-name/v1.0.0
 git push origin your-app-name/v1.0.0
 ```
+
+```
+
 ```

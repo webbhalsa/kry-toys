@@ -587,7 +587,7 @@ fn get_gh_token() -> Option<String> {
 async fn get_latest_manifest_url(token: &str) -> Result<String, String> {
     let client = reqwest::Client::new();
     let releases: Vec<serde_json::Value> = client
-        .get("https://api.github.com/repos/webbhalsa/kry-toys/releases?per_page=20")
+        .get("https://api.github.com/repos/webbhalsa/kry-tools/releases?per_page=20")
         .header("Authorization", format!("Bearer {}", token))
         .header("Accept", "application/vnd.github+json")
         .header("User-Agent", "lmwrnglr-updater")
